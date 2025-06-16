@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const {app, server} = require('./lib/socket');
 const connectDb = require('./lib/connectDb');
+const path = require('path');
 
 dotenv.config();
 
@@ -25,7 +26,14 @@ app.use('/api/auth', authRouter);
 const messageRouter = require('./routes/message.router');
 app.use('/api/messages', messageRouter);
 
+const __dirname = path.resolve();
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, '../Frontend/dist')));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../Frontend/dist/index.html'));
 
+  })
+}
   
 const port = process.env.PORT
 server.listen(port, () =>  {
