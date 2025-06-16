@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const {app, server} = require('./lib/socket');
+const connectDb = require('./lib/connectDb');
 
 dotenv.config();
 
@@ -25,21 +26,9 @@ const messageRouter = require('./routes/message.router');
 app.use('/api/messages', messageRouter);
 
 
-app.get('/', (req, res) => {
-    res.send('Hello, Node.js!');
-});
-
-
-let connectionString = "mongodb://localhost:27017/New-Chat-App";
-mongoose.connect(connectionString)
-  .then(() => {
-    console.log(`Connected To: ${connectionString}`);
-  })
-  .catch((err) => {
-    console.log(err.message);
-  });
   
 const port = process.env.PORT
-server.listen(port, () => {
+server.listen(port, () =>  {
     console.log('Server is running on port 5001');
+    connectDb();
 });
