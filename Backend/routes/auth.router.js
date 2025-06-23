@@ -14,7 +14,6 @@ const upload = multer({ storage: storage }).single("profilePic"); // 'profilePic
 
 router.post("/signup", async (req, res) => {
   const { username, email, password } = req.body;
-  console.log(req.body);
   try {
     if (!username || !email || !password) {
       return res.status(400).json({ error: "Please fill all the fields" });
@@ -61,12 +60,8 @@ router.post("/verify-otp/:userId", async (req, res) => {
   const { otp } = req.body;
   const userId = req.params.userId;
 
-  console.log("UserID:", userId);
-  console.log("OTP Received:", otp);
-
   try {
       const otpEntry = await OTP.findOne({ userId, otp });
-      console.log("OTP Entry in DB:", otpEntry);
 
       if (!otpEntry) {
           return res.status(400).json({ error: "Invalid or expired OTP." });
